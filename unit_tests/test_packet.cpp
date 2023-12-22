@@ -27,6 +27,7 @@
 #include <gtest/gtest.h>
 #include <zlib.h>
 #include "quadra/inc/packet.h"
+#include "quadra/inc/scrambler.h"
 #include "test_error_correction.h"
 
 namespace quadra::test::packet
@@ -61,8 +62,7 @@ protected:
     Packet<kPacketSize> packet_;
     Block<kBlockSize> block_;
     std::minstd_rand rng_;
-    std::linear_congruential_engine<uint64_t, 1664525, 1013904223, 1ULL << 32>
-        scrambler_;
+    Scrambler scrambler_;
 
     void SetUp() override
     {
@@ -70,7 +70,7 @@ protected:
         RandomizeData();
         packet_.Init(kCRCSeed);
         block_.Init();
-        scrambler_.seed(0);
+        scrambler_.Init();
     }
 
     void RandomizeData(void)
@@ -93,7 +93,7 @@ protected:
 
     void PushByte(uint8_t byte)
     {
-        byte ^= scrambler_() >> 24;
+        byte = scrambler_.Process(byte);
         packet_.WriteSymbol((byte >> 4) & 0xF);
         packet_.WriteSymbol((byte >> 0) & 0xF);
     }
@@ -177,7 +177,7 @@ TYPED_TEST(PacketTest, BlockFill)
         ASSERT_FALSE(this->block_.full());
         this->RandomizeData();
         this->packet_.Reset();
-        this->scrambler_.seed(0);
+        this->scrambler_.Init();
 
         for (auto byte : this->data_)
         {
