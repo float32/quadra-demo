@@ -35,4 +35,5 @@ cog:
 	@cog -r quadra/inc/carrier_rejection_filter.h
 	@cog -r quadra/inc/util.h
 	@cog -r unit_tests/test_decoder.cpp
+	@cog -r unit_tests/test_packet.cpp
 	@cog -r sim/vcd_var.h

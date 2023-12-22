@@ -33,28 +33,72 @@
 namespace quadra::test::packet
 {
 
-using PacketSizes = ::testing::Types<
-    std::integral_constant<uint32_t, 4>,
-    std::integral_constant<uint32_t, 8>,
-    std::integral_constant<uint32_t, 16>,
-    std::integral_constant<uint32_t, 32>,
-    std::integral_constant<uint32_t, 64>,
-    std::integral_constant<uint32_t, 100>,
-    std::integral_constant<uint32_t, 128>,
-    std::integral_constant<uint32_t, 252>,
-    std::integral_constant<uint32_t, 256>,
-    std::integral_constant<uint32_t, 260>,
-    std::integral_constant<uint32_t, 1000>,
-    std::integral_constant<uint32_t, 4096>>;
+template <int packet_size, int packets_per_block>
+using ParamType = std::tuple<
+    std::integral_constant<int, packet_size>,
+    std::integral_constant<int, packets_per_block>>;
+using ParamTypeList = ::testing::Types<
+    /*[[[cog
+    import itertools
+    lines = []
+    packet_size = (4, 8, 16, 32, 52, 64, 100, 128, 252, 256, 260, 1000, 4096)
+    packets_per_block = (1, 4, 7)
+    tests = itertools.product(packet_size, packets_per_block)
+    for (packet_size, packets_per_block) in tests:
+        lines.append('ParamType<{:4}, {:2}>'
+            .format(packet_size, packets_per_block))
+    cog.outl(',\n'.join(lines))
+    ]]]*/
+    ParamType<   4,  1>,
+    ParamType<   4,  4>,
+    ParamType<   4,  7>,
+    ParamType<   8,  1>,
+    ParamType<   8,  4>,
+    ParamType<   8,  7>,
+    ParamType<  16,  1>,
+    ParamType<  16,  4>,
+    ParamType<  16,  7>,
+    ParamType<  32,  1>,
+    ParamType<  32,  4>,
+    ParamType<  32,  7>,
+    ParamType<  52,  1>,
+    ParamType<  52,  4>,
+    ParamType<  52,  7>,
+    ParamType<  64,  1>,
+    ParamType<  64,  4>,
+    ParamType<  64,  7>,
+    ParamType< 100,  1>,
+    ParamType< 100,  4>,
+    ParamType< 100,  7>,
+    ParamType< 128,  1>,
+    ParamType< 128,  4>,
+    ParamType< 128,  7>,
+    ParamType< 252,  1>,
+    ParamType< 252,  4>,
+    ParamType< 252,  7>,
+    ParamType< 256,  1>,
+    ParamType< 256,  4>,
+    ParamType< 256,  7>,
+    ParamType< 260,  1>,
+    ParamType< 260,  4>,
+    ParamType< 260,  7>,
+    ParamType<1000,  1>,
+    ParamType<1000,  4>,
+    ParamType<1000,  7>,
+    ParamType<4096,  1>,
+    ParamType<4096,  4>,
+    ParamType<4096,  7>
+    //[[[end]]]
+    >;
 
-constexpr uint32_t kPacketsPerBlock = 4;
 constexpr uint32_t kCRCSeed = 420;
 
 template <typename T>
 class PacketTest : public ::testing::Test
 {
 protected:
-    static constexpr uint32_t kPacketSize = T::value;
+    static constexpr uint32_t kPacketSize = std::tuple_element_t<0, T>::value;
+    static constexpr uint32_t kPacketsPerBlock = std::tuple_element_t<1, T>::value;
     static constexpr uint32_t kBlockSize = kPacketSize * kPacketsPerBlock;
     uint8_t data_[kPacketSize];
     uint32_t expected_crc_;
@@ -99,7 +143,7 @@ protected:
     }
 };
 
-TYPED_TEST_CASE(PacketTest, PacketSizes);
+TYPED_TEST_CASE(PacketTest, ParamTypeList);
 
 TYPED_TEST(PacketTest, Valid)
 {
@@ -172,7 +216,7 @@ TYPED_TEST(PacketTest, BlockFill)
 {
     std::vector<uint8_t> bytes;
 
-    for (uint32_t i = 0; i < kPacketsPerBlock; i++)
+    for (uint32_t i = 0; i < this->kPacketsPerBlock; i++)
     {
         ASSERT_FALSE(this->block_.full());
         this->RandomizeData();
