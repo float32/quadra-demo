@@ -1,0 +1,90 @@
+[*]
+[*] GTKWave Analyzer v3.3.104 (w)1999-2020 BSI
+[*] Thu Dec 21 00:04:14 2023
+[*]
+[dumpfile] "../build/artifact/sim-pll.vcd"
+[dumpfile_mtime] "Thu Dec 21 00:03:28 2023"
+[dumpfile_size] 56036448
+[savefile] "../sim/sim-pll.gtkw"
+[timestart] 0
+[size] 2124 893
+[pos] -1 -1
+*-19.365976 0 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1
+[sst_width] 233
+[signals_width] 210
+[sst_expanded] 1
+[sst_vpaned_height] 246
+@22
+top.symbol
+@40008420
+[color] 2
+[fpshift_count] 12
+top.signal
+@20000
+-
+@200
+-
+@40008420
+[fpshift_count] 12
+top.ref_phase
+@20000
+-
+@40008420
+[fpshift_count] 12
+top.pll_phase
+@20000
+-
+@40008420
+[color] 1
+[fpshift_count] 16
+top.exact_error
+@20000
+-
+-
+-
+@200
+-
+@40008420
+[color] 3
+[fpshift_count] 16
+top.error
+@20000
+-
+@40008421
+[color] 3
+[fpshift_count] 20
+top.step
+@20000
+-
+@40008420
+[color] 4
+[fpshift_count] 4
+top.i_in
+[color] 5
+[fpshift_count] 12
+top.i_mod
+@20000
+-
+@40008420
+[color] 2
+[fpshift_count] 12
+top.i_out
+@20000
+-
+@40008420
+[color] 4
+[fpshift_count] 4
+top.q_in
+[color] 5
+[fpshift_count] 12
+top.q_mod
+@20000
+-
+@40008420
+[color] 2
+[fpshift_count] 12
+top.q_out
+@20000
+-
+[pattern_trace] 1
+[pattern_trace] 0

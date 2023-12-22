@@ -1,0 +1,3 @@
+[submodule "quadra"]
+	path = quadra
+	url = https://github.com/float32/quadra.git

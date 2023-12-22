@@ -1,0 +1,88 @@
+[*]
+[*] GTKWave Analyzer v3.3.104 (w)1999-2020 BSI
+[*] Wed Dec 20 04:07:50 2023
+[*]
+[dumpfile] "../build/artifact/sim-demodulator.vcd"
+[dumpfile_mtime] "Wed Dec 20 04:03:53 2023"
+[dumpfile_size] 49778424
+[savefile] "../sim/sim-demodulator.gtkw"
+[timestart] 0
+[size] 2153 944
+[pos] -1 -1
+*-19.490383 0 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1
+[sst_width] 233
+[signals_width] 227
+[sst_expanded] 1
+[sst_vpaned_height] 263
+@2420
+^1 ../sim/demodulator-state.txt
+top.state
+@40008420
+[fpshift_count] 16
+top.in
+@20000
+-
+-
+-
+@40008420
+[color] 7
+[fpshift_count] 16
+top.power
+[color] 7
+[fpshift_count] 16
+top.agc
+@20000
+-
+@200
+-
+@40008420
+[fpshift_count] 16
+top.pll_phase
+@20000
+-
+-
+-
+@40008420
+[color] 1
+[fpshift_count] 16
+top.pll_error
+[color] 4
+[fpshift_count] 20
+top.pll_step
+@200
+-
+@40008420
+[color] 2
+[fpshift_count] 16
+top.I
+@20000
+-
+@40008420
+[color] 2
+[fpshift_count] 16
+top.Q
+@20000
+-
+@40008420
+[fpshift_count] 16
+top.correlation
+@20000
+-
+@40000420
+[color] 6
+[fpshift_count] 16
+top.dec_phase
+@200
+-
+@28
+[color] 1
+top.decide
+@22
+top.symbol
+[color] 3
+top.expected
+@29
+[color] 3
+top.match
+[pattern_trace] 1
+[pattern_trace] 0
