@@ -41,7 +41,7 @@ namespace quadra::sim::decoder
 using namespace vcd;
 
 constexpr uint32_t kSampleRate = 48000;
-constexpr uint32_t kSymbolRate = 8000;
+constexpr uint32_t kSymbolRate = 9600;
 constexpr uint32_t kPacketSize = 256;
 constexpr uint32_t kBlockSize = kPacketSize * 4;
 constexpr uint32_t kCRCSeed = 0;
@@ -183,7 +183,7 @@ inline void EncodeAndSimulate(std::string vcd_file, std::string bin_file,
 
     // Resample, attenuate, and add noise
     static constexpr float kResamplingRatio = 1.02f;
-    static constexpr float kNoise_dB = -18;
+    static constexpr float kNoise_dB = -30;
     static constexpr float kScale = 0.3;
     static constexpr float kOffset = 0.25;
     signal = test::util::Resample(signal, kResamplingRatio);

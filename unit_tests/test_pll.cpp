@@ -34,8 +34,10 @@ static const double kCarrierFrequencies[] =
 {
     1.0 / 16.0,
     1.0 / 12.0,
+    1.0 / 10.0,
     1.0 / 8.0,
     1.0 / 6.0,
+    1.0 / 5.0,
 };
 
 static const double kMismatchFactors[] =

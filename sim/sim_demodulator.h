@@ -43,7 +43,7 @@ namespace quadra::sim::demodulator
 using namespace vcd;
 
 constexpr uint32_t kSampleRate = 48000;
-constexpr uint32_t kSymbolRate = 8000;
+constexpr uint32_t kSymbolRate = 9600;
 
 using Symbols = std::vector<uint8_t>;
 using Signal = std::vector<float>;
@@ -218,7 +218,7 @@ inline void Simulate(std::string vcd_file)
     // Resample and add noise
     static constexpr float kResamplingRatio = 1.02;
     static constexpr float kScale = 1.0;
-    static constexpr float kNoise_dB = -18;
+    static constexpr float kNoise_dB = -30;
     signal = test::util::Resample(signal, kResamplingRatio);
     signal = test::util::Scale(signal, kScale);
     signal = test::util::AddNoise(signal, std::pow(10, kNoise_dB / 20));

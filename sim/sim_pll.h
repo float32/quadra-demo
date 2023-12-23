@@ -43,7 +43,7 @@ namespace quadra::sim::pll
 using namespace vcd;
 
 constexpr uint32_t kSampleRate = 48000;
-constexpr uint32_t kSymbolRate = 8000;
+constexpr uint32_t kSymbolRate = 9600;
 constexpr uint32_t kSymbolDuration = kSampleRate / kSymbolRate;
 
 using Symbols = std::vector<uint8_t>;
