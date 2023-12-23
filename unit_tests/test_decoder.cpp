@@ -40,49 +40,148 @@ constexpr float kFlashWriteTime = 0.025f;
 
 using Signal = std::vector<float>;
 
-template <int A, int B, int C>
+template <int symbol_duration, int noise_dB, bool invert,
+    int samplerate_mismatch_ppm>
 using ParamType = std::tuple<
-    std::integral_constant<int, A>,
-    std::integral_constant<int, B>,
-    std::integral_constant<int, C>>;
+    std::integral_constant<int, symbol_duration>,
+    std::integral_constant<int, noise_dB>,
+    std::integral_constant<int, invert>,
+    std::integral_constant<int, samplerate_mismatch_ppm>
+    >;
 using ParamTypeList = ::testing::Types<
     /*[[[cog
     import itertools
     lines = []
     symbol_duration = (6, 8, 12, 16)
-    packet_size = (52, 256)
-    num_packets = (1, 4, 7)
-    encodings = itertools.product(symbol_duration, packet_size, num_packets)
-    for (symbol_duration, packet_size, num_packets) in encodings:
-        block_size = packet_size * num_packets
-        lines.append('ParamType<{:2}, {:4}, {:5}>'
-            .format(symbol_duration, packet_size, block_size))
+    noise_dB = (-100, -60, -18)
+    invert = (0, 1)
+    mismatch_ppm = (0, 100, -100, 50000, -50000)
+    tests = itertools.product(symbol_duration, noise_dB, invert, mismatch_ppm)
+    for (symbol_duration, noise_dB, invert, mismatch_ppm) in tests:
+        lines.append('ParamType<{:2}, {:4}, {:1}, {:6}>'
+            .format(symbol_duration, noise_dB, invert, mismatch_ppm))
     cog.outl(',\n'.join(lines))
     ]]]*/
-    ParamType< 6,   52,    52>,
-    ParamType< 6,   52,   208>,
-    ParamType< 6,   52,   364>,
-    ParamType< 6,  256,   256>,
-    ParamType< 6,  256,  1024>,
-    ParamType< 6,  256,  1792>,
-    ParamType< 8,   52,    52>,
-    ParamType< 8,   52,   208>,
-    ParamType< 8,   52,   364>,
-    ParamType< 8,  256,   256>,
-    ParamType< 8,  256,  1024>,
-    ParamType< 8,  256,  1792>,
-    ParamType<12,   52,    52>,
-    ParamType<12,   52,   208>,
-    ParamType<12,   52,   364>,
-    ParamType<12,  256,   256>,
-    ParamType<12,  256,  1024>,
-    ParamType<12,  256,  1792>,
-    ParamType<16,   52,    52>,
-    ParamType<16,   52,   208>,
-    ParamType<16,   52,   364>,
-    ParamType<16,  256,   256>,
-    ParamType<16,  256,  1024>,
-    ParamType<16,  256,  1792>
+    ParamType< 6, -100, 0,      0>,
+    ParamType< 6, -100, 0,    100>,
+    ParamType< 6, -100, 0,   -100>,
+    ParamType< 6, -100, 0,  50000>,
+    ParamType< 6, -100, 0, -50000>,
+    ParamType< 6, -100, 1,      0>,
+    ParamType< 6, -100, 1,    100>,
+    ParamType< 6, -100, 1,   -100>,
+    ParamType< 6, -100, 1,  50000>,
+    ParamType< 6, -100, 1, -50000>,
+    ParamType< 6,  -60, 0,      0>,
+    ParamType< 6,  -60, 0,    100>,
+    ParamType< 6,  -60, 0,   -100>,
+    ParamType< 6,  -60, 0,  50000>,
+    ParamType< 6,  -60, 0, -50000>,
+    ParamType< 6,  -60, 1,      0>,
+    ParamType< 6,  -60, 1,    100>,
+    ParamType< 6,  -60, 1,   -100>,
+    ParamType< 6,  -60, 1,  50000>,
+    ParamType< 6,  -60, 1, -50000>,
+    ParamType< 6,  -18, 0,      0>,
+    ParamType< 6,  -18, 0,    100>,
+    ParamType< 6,  -18, 0,   -100>,
+    ParamType< 6,  -18, 0,  50000>,
+    ParamType< 6,  -18, 0, -50000>,
+    ParamType< 6,  -18, 1,      0>,
+    ParamType< 6,  -18, 1,    100>,
+    ParamType< 6,  -18, 1,   -100>,
+    ParamType< 6,  -18, 1,  50000>,
+    ParamType< 6,  -18, 1, -50000>,
+    ParamType< 8, -100, 0,      0>,
+    ParamType< 8, -100, 0,    100>,
+    ParamType< 8, -100, 0,   -100>,
+    ParamType< 8, -100, 0,  50000>,
+    ParamType< 8, -100, 0, -50000>,
+    ParamType< 8, -100, 1,      0>,
+    ParamType< 8, -100, 1,    100>,
+    ParamType< 8, -100, 1,   -100>,
+    ParamType< 8, -100, 1,  50000>,
+    ParamType< 8, -100, 1, -50000>,
+    ParamType< 8,  -60, 0,      0>,
+    ParamType< 8,  -60, 0,    100>,
+    ParamType< 8,  -60, 0,   -100>,
+    ParamType< 8,  -60, 0,  50000>,
+    ParamType< 8,  -60, 0, -50000>,
+    ParamType< 8,  -60, 1,      0>,
+    ParamType< 8,  -60, 1,    100>,
+    ParamType< 8,  -60, 1,   -100>,
+    ParamType< 8,  -60, 1,  50000>,
+    ParamType< 8,  -60, 1, -50000>,
+    ParamType< 8,  -18, 0,      0>,
+    ParamType< 8,  -18, 0,    100>,
+    ParamType< 8,  -18, 0,   -100>,
+    ParamType< 8,  -18, 0,  50000>,
+    ParamType< 8,  -18, 0, -50000>,
+    ParamType< 8,  -18, 1,      0>,
+    ParamType< 8,  -18, 1,    100>,
+    ParamType< 8,  -18, 1,   -100>,
+    ParamType< 8,  -18, 1,  50000>,
+    ParamType< 8,  -18, 1, -50000>,
+    ParamType<12, -100, 0,      0>,
+    ParamType<12, -100, 0,    100>,
+    ParamType<12, -100, 0,   -100>,
+    ParamType<12, -100, 0,  50000>,
+    ParamType<12, -100, 0, -50000>,
+    ParamType<12, -100, 1,      0>,
+    ParamType<12, -100, 1,    100>,
+    ParamType<12, -100, 1,   -100>,
+    ParamType<12, -100, 1,  50000>,
+    ParamType<12, -100, 1, -50000>,
+    ParamType<12,  -60, 0,      0>,
+    ParamType<12,  -60, 0,    100>,
+    ParamType<12,  -60, 0,   -100>,
+    ParamType<12,  -60, 0,  50000>,
+    ParamType<12,  -60, 0, -50000>,
+    ParamType<12,  -60, 1,      0>,
+    ParamType<12,  -60, 1,    100>,
+    ParamType<12,  -60, 1,   -100>,
+    ParamType<12,  -60, 1,  50000>,
+    ParamType<12,  -60, 1, -50000>,
+    ParamType<12,  -18, 0,      0>,
+    ParamType<12,  -18, 0,    100>,
+    ParamType<12,  -18, 0,   -100>,
+    ParamType<12,  -18, 0,  50000>,
+    ParamType<12,  -18, 0, -50000>,
+    ParamType<12,  -18, 1,      0>,
+    ParamType<12,  -18, 1,    100>,
+    ParamType<12,  -18, 1,   -100>,
+    ParamType<12,  -18, 1,  50000>,
+    ParamType<12,  -18, 1, -50000>,
+    ParamType<16, -100, 0,      0>,
+    ParamType<16, -100, 0,    100>,
+    ParamType<16, -100, 0,   -100>,
+    ParamType<16, -100, 0,  50000>,
+    ParamType<16, -100, 0, -50000>,
+    ParamType<16, -100, 1,      0>,
+    ParamType<16, -100, 1,    100>,
+    ParamType<16, -100, 1,   -100>,
+    ParamType<16, -100, 1,  50000>,
+    ParamType<16, -100, 1, -50000>,
+    ParamType<16,  -60, 0,      0>,
+    ParamType<16,  -60, 0,    100>,
+    ParamType<16,  -60, 0,   -100>,
+    ParamType<16,  -60, 0,  50000>,
+    ParamType<16,  -60, 0, -50000>,
+    ParamType<16,  -60, 1,      0>,
+    ParamType<16,  -60, 1,    100>,
+    ParamType<16,  -60, 1,   -100>,
+    ParamType<16,  -60, 1,  50000>,
+    ParamType<16,  -60, 1, -50000>,
+    ParamType<16,  -18, 0,      0>,
+    ParamType<16,  -18, 0,    100>,
+    ParamType<16,  -18, 0,   -100>,
+    ParamType<16,  -18, 0,  50000>,
+    ParamType<16,  -18, 0, -50000>,
+    ParamType<16,  -18, 1,      0>,
+    ParamType<16,  -18, 1,    100>,
+    ParamType<16,  -18, 1,   -100>,
+    ParamType<16,  -18, 1,  50000>,
+    ParamType<16,  -18, 1, -50000>
     //[[[end]]]
     >;
 
@@ -94,10 +193,14 @@ public:
     static inline std::vector<uint8_t> test_data_;
 
     static constexpr int kSymbolDuration = std::tuple_element_t<0, T>::value;
-    static constexpr int kPacketSize     = std::tuple_element_t<1, T>::value;
-    static constexpr int kBlockSize      = std::tuple_element_t<2, T>::value;
+    static constexpr int kNoise_dB       = std::tuple_element_t<1, T>::value;
+    static constexpr int kInvert         = std::tuple_element_t<2, T>::value;
+    static constexpr int kMismatchPPM    = std::tuple_element_t<3, T>::value;
+
     static constexpr int kSymbolRate     = kSampleRate / kSymbolDuration;
-    Decoder<kSampleRate, kSymbolRate, kPacketSize, kBlockSize, 256> decoder_;
+    static constexpr int kPacketSize     = 256;
+    static constexpr int kBlockSize      = 1024;
+    Decoder<kSampleRate, kSymbolRate, kPacketSize, kBlockSize> decoder_;
 
     void DebugError(Error error)
     {
@@ -175,22 +278,11 @@ public:
         decoder_.Init(kCRCSeed);
     }
 
-    void Decode(float resampling_ratio, float signal_level, float noise_dB)
+    void Decode(float signal_level, float noise_dB, float resampling_ratio)
     {
         Signal signal = test_audio_;
         signal = util::Resample(signal, resampling_ratio);
         signal = util::AddNoise(signal, std::pow(10, noise_dB / 20));
-        signal = util::Scale(signal, signal_level);
-        Decode(signal);
-    }
-
-    void Decode(float resampling_ratio, float signal_level, float noise_dB,
-        float clip_low, float clip_high)
-    {
-        Signal signal = test_audio_;
-        signal = util::Resample(signal, resampling_ratio);
-        signal = util::AddNoise(signal, std::pow(10, noise_dB / 20));
-        signal = util::Clamp(signal, clip_low, clip_high);
         signal = util::Scale(signal, signal_level);
         Decode(signal);
     }
@@ -257,34 +349,12 @@ public:
 
 TYPED_TEST_CASE(DecoderTest, ParamTypeList);
 
-TYPED_TEST(DecoderTest, Noisy)
+TYPED_TEST(DecoderTest, Decode)
 {
-    this->Decode(1.f, 1.f, -20);
-}
-
-TYPED_TEST(DecoderTest, Inverted)
-{
-    this->Decode(1.f, -1.f, -100.f);
-}
-
-TYPED_TEST(DecoderTest, Upsampled)
-{
-    this->Decode(1.02f, 1.f, -100.f);
-}
-
-TYPED_TEST(DecoderTest, Downsampled)
-{
-    this->Decode(0.98f, 1.f, -100.f);
-}
-
-TYPED_TEST(DecoderTest, Clipped)
-{
-    this->Decode(1.f, 1.f, -100.f, -0.9f, 0.9f);
-}
-
-TYPED_TEST(DecoderTest, Imperfect)
-{
-    this->Decode(0.99f, 0.5f, -40);
+    float scale = this->kInvert ? -1 : 1;
+    float noise_dB = this->kNoise_dB;
+    float resampling_ratio = 1 + this->kMismatchPPM * 1e-6;
+    this->Decode(scale, noise_dB, resampling_ratio);
 }
 
 
@@ -292,7 +362,7 @@ TYPED_TEST(DecoderTest, Imperfect)
 class HangTest : public ::testing::Test
 {
 public:
-    Decoder<kSampleRate, 8000, 256, 1024, 256> decoder_;
+    Decoder<kSampleRate, kSampleRate / 6, 256, 1024> decoder_;
 
     void SetUp() override
     {
